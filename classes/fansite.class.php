@@ -7,7 +7,7 @@ interface fansite {
      * @param  string   The URL to be summarised
      * @return string   The Reddit ready markdown response
      */
-    public function summarise($url);
+    public static function summarise($url);
 }
 
 ?>

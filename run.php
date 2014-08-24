@@ -10,6 +10,8 @@ spl_autoload_register(function ($class) {
 echo("<pre>");
 
 $reddit = new reddit();
+$reddit->login(REDDIT_NAME, REDDIT_PASSWORD);
+
 echo($reddit::table(array("Hi", "bob", "Um"), array(array("hi", "bob", "pls"), array("high", "blob")), 3));
 
 echo("</pre>");

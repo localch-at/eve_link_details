@@ -10,15 +10,24 @@ class reddit {
     }
     
     public function getNewPosts($subreddit) {
-        // todo
+        $posts = $this->curl("http://www.reddit.com/r/" . $subreddit . "/new.json?sort=new");
+        $post_list = json_decode($posts, true);
+        return $post_list['data']['children'];
     }
     
-    public function getPost($post_id) {
-        // todo
+    public function getPost($subreddit, $post_id) {
+        return json_decode($this->curl('http://www.reddit.com/r/' . $subreddit . '/comments/' . $post_id . '.json'), true);
     }
     
-    public function postComment($post_id) {
-        // todo
+    public function postComment($post_id, $comment) {
+        // t3_ from http://www.reddit.com/dev/api#fullnames
+        $data = array(
+            "thing_id" => 't3_' . $post_id,
+            "text" => $comment,
+            "uh" => $this->modhash,
+        );
+        
+        return $this->curl("https://ssl.reddit.com/api/comment", true, $data);
     }
     
     // used to note items destroyed
@@ -90,6 +99,20 @@ class reddit {
             throw new Exception("Ill-formed curl POST");
         }
         
-        // todo
+        $curl = curl_init($url);
+        
+        if ($post) {
+            curl_setopt($ch, CURLOPT_COOKIE, $this->cookie);
+            curl_setopt($ch, CURLOPT_POST, true);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $post_data);
+        }
+        
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($curl, CURLOPT_USERAGENT, "u/lacking_effort bot for r/eve");
+        curl_setopt($curl, CURLOPT_TIMEOUT, 30);
+        $return = curl_exec($curl);
+        curl_close($curl);
+        
+        return $return;
     }
 }

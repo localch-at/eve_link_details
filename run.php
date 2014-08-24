@@ -1,12 +1,17 @@
 <?php
 
-requires_once("config.php");
+//requires_once("config.php");
 
 // Lets not do a long list of requires
-function __autoload($class_name) {
-    require_once 'classes/' . $class_name . '.php';
-}
+spl_autoload_register(function ($class) {
+    require_once('classes/' . $class . '.class.php');
+});
 
-phpinfo();
+echo("<pre>");
+
+$reddit = new reddit();
+echo($reddit::table(array("Hi", "bob", "Um"), array(array("hi", "bob", "pls"), array("high", "blob")), 3));
+
+echo("</pre>");
 
 ?>

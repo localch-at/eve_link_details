@@ -3,7 +3,7 @@
  * Db
  * PHP 5.3+
  */
-class Db {
+class database {
 	/* Configuration */
 	/**
 	 * Configuration storage

@@ -9,7 +9,7 @@
  * Free to use and abuse under the MIT license.
  * http://www.opensource.org/licenses/mit-license.php
  */
-class SimpleCache {
+class cache {
 
 	// Path to cache folder (with trailing /)
 	public $cache_path = 'cache/';

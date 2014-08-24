@@ -7,7 +7,7 @@ Reddit bot for r/EvE powered by PHP and spaghetti. Aims to summarise eve fansite
 ## Requirements
 
 * A non-captcha Reddit account (eventually I'll add a check for this and a convienent notice).
-* PHP (version number untested at the moment).
+* PHP >= 5.3.0.
 * MySQL (loaded with a couple of the EvE SDE tables).
 * cURL & CronJob access (some providers prohibit this when you don't have SSH access).
 

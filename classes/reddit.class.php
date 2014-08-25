@@ -2,16 +2,34 @@
 
 // http://www.reddit.com/dev/api
 class reddit {
+    private $loggedIn = false;
     private $cookie;
     private $modhash;
     
     public function login($username, $password) {
         // todo
+        $data = array (
+            "user" => $username,
+            "passwd" => $password,
+            "api_type" => "json"
+        );
+        
+        $response = json_decode($this->curl("https://ssl.reddit.com/api/login", true, $data), true);
+        $response = $response['json']['data'];
+        
+        // rudimentary 
+        if (!$response) {
+            $this->loggedIn = false;
+            throw new Exception("Invalid login details");
+        } else {
+            $this->cookie = 'reddit_session=' . urlencode($response['cookie']);
+            $this->modhash = $response['modhash'];
+            $this->loggedIn = true;
+        }
     }
     
     public function getNewPosts($subreddit) {
-        $posts = $this->curl("http://www.reddit.com/r/" . $subreddit . "/new.json?sort=new");
-        $post_list = json_decode($posts, true);
+        $post_list = json_decode($this->curl("http://www.reddit.com/r/" . $subreddit . "/new.json?sort=new"), true);
         return $post_list['data']['children'];
     }
     
@@ -102,9 +120,9 @@ class reddit {
         $curl = curl_init($url);
         
         if ($post) {
-            curl_setopt($ch, CURLOPT_COOKIE, $this->cookie);
-            curl_setopt($ch, CURLOPT_POST, true);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $post_data);
+            curl_setopt($curl, CURLOPT_COOKIE, $this->cookie);
+            curl_setopt($curl, CURLOPT_POST, true);
+            curl_setopt($curl, CURLOPT_POSTFIELDS, $post_data);
         }
         
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
@@ -112,7 +130,7 @@ class reddit {
         curl_setopt($curl, CURLOPT_TIMEOUT, 30);
         $return = curl_exec($curl);
         curl_close($curl);
-        
+
         return $return;
     }
 }
